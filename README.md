@@ -11,7 +11,7 @@
         brew install mosquitto
         mosquitto_sub -h 127.0.0.1 -t /#
 
-3 - run project test
+3 - run project [MqttAmqpInteropTest.java](https://github.com/dimetron/Rabbit2MqttExample/blob/master/src/test/java/MqttAmqpInteropTest.java)
 
         ./gradlew test
 

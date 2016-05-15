@@ -38,9 +38,12 @@ public class MqttAmqpInteropTest {
 
     @Test
     public void testAmqpMessage2Mqtt() {
+        String messagePayload = "Message From Amqp Test";
+
         ThreadPoolTaskScheduler taskScheduler = new ThreadPoolTaskScheduler();
         taskScheduler.initialize();
 
+        //queue to test messages
         QueueChannel outputChannel = new QueueChannel();
 
         MqttPahoMessageDrivenChannelAdapter inbound = new MqttPahoMessageDrivenChannelAdapter("tcp://localhost:1883", "testClient", "#");
@@ -51,7 +54,6 @@ public class MqttAmqpInteropTest {
         inbound.start();
 
         //sending message AMQP but Receive by Mqtt
-        String messagePayload = "Message From Amqp Test";
         template.convertAndSend(messagePayload);
 
         Message<?> message1 = outputChannel.receive(10000);
@@ -71,10 +73,12 @@ public class MqttAmqpInteropTest {
         handler.afterPropertiesSet();
         handler.start();
 
+        //sending message to Mqtt and Receiving by AMQP using Rabbit template
         Message<String> message = new GenericMessage<String>(messagePayload);
         handler.handleMessage(message);
         handler.stop();
 
+        //resulted message will be captured by - amqMessageListener
         org.springframework.amqp.core.Message messageFromRabbit = amqMessageListener.receive();
         assertNotNull(messageFromRabbit);
         System.out.println(messageFromRabbit.toString());
