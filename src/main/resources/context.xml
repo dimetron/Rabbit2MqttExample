@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:int="http://www.springframework.org/schema/integration"
+       xmlns:int-mqtt="http://www.springframework.org/schema/integration/mqtt"
+       xmlns:rabbit="http://www.springframework.org/schema/rabbit"
+
+       xsi:schemaLocation="http://www.springframework.org/schema/rabbit http://www.springframework.org/schema/rabbit/spring-rabbit.xsd
+	   http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	   http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd
+       http://www.springframework.org/schema/integration/mqtt http://www.springframework.org/schema/integration/mqtt/spring-integration-mqtt.xsd"
+>
+
+
+
+    <rabbit:connection-factory id="connectionFactory"/>
+
+    <rabbit:admin connection-factory="connectionFactory"/>
+
+    <rabbit:template id="amqpTemplate" connection-factory="connectionFactory" exchange="amq.topic" routing-key=".#"/>
+
+    <rabbit:queue name="UsersQueue"/>
+
+    <rabbit:topic-exchange name="amq.topic">
+        <rabbit:bindings>
+            <rabbit:binding queue="UsersQueue" pattern="#"/>
+        </rabbit:bindings>
+    </rabbit:topic-exchange>
+
+    <rabbit:listener-container connection-factory="connectionFactory">
+        <rabbit:listener ref="amqMessageListener" queue-names="UsersQueue"/>
+    </rabbit:listener-container>
+
+    <bean id="amqMessageListener" class="AmqMessageListener"/>
+
+    <bean id="mqttClientFactory" class="org.springframework.integration.mqtt.core.DefaultMqttPahoClientFactory">
+       <!--
+        <property name="userName" value="${mqtt.username}"/>
+        <property name="password" value="${mqtt.password}"/>
+        -->
+    </bean>
+
+</beans>
