@@ -38,7 +38,7 @@ public class MqttAmqpInteropTest {
 
     @Test
     public void testAmqpMessage2Mqtt() {
-        String messagePayload = "Message From Amqp Test";
+        String messagePayload = "Message from Amqp !!!";
 
         ThreadPoolTaskScheduler taskScheduler = new ThreadPoolTaskScheduler();
         taskScheduler.initialize();
@@ -61,12 +61,12 @@ public class MqttAmqpInteropTest {
         inbound.stop();
 
         assertEquals(messagePayload, message1.getPayload());
-        assertEquals("/#", message1.getHeaders().get(MqttHeaders.TOPIC));
+        assertEquals("/users/registration", message1.getHeaders().get(MqttHeaders.TOPIC));
     }
 
     @Test
     public void testMqttMessage2Amqp() throws InterruptedException {
-        String messagePayload = "Message from Mqtt";
+        String messagePayload = "Message from Mqtt !!!";
 
         MqttPahoMessageHandler handler = new MqttPahoMessageHandler("tcp://localhost:1883", clientId, mqttClientFactory);
         handler.setDefaultTopic("/users/registration");

@@ -16,7 +16,7 @@
 
     <rabbit:admin connection-factory="connectionFactory"/>
 
-    <rabbit:template id="amqpTemplate" connection-factory="connectionFactory" exchange="amq.topic" routing-key=".#"/>
+    <rabbit:template id="amqpTemplate" connection-factory="connectionFactory" exchange="amq.topic" routing-key=".users/registration"/>
 
     <rabbit:queue name="UsersQueue"/>
 
