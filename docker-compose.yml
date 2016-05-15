@@ -1,0 +1,7 @@
+rabbit1:
+  image: kiyohara/docker-rabbitmq-mqtt
+  hostname: rabbit
+  ports:
+    - "5672:5672"
+    - "15672:15672"
+    - "1883:1883"
